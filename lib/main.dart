@@ -1,3 +1,4 @@
+import 'package:fludex/fludex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:movie/screens/home.dart';
@@ -5,69 +6,35 @@ import 'package:movie/screens/home.dart';
 import './screens/about.dart' as _aboutPage;
 import './screens/support.dart' as _supportPage;
 
-void main() => runApp(new MaterialApp(
-  title: 'Movie',
-  theme: new ThemeData(
-    primarySwatch: Colors.blueGrey,
-    scaffoldBackgroundColor: Colors.white,
-    primaryColor: Colors.blueGrey,
-    backgroundColor: Colors.white
-  ),
-  home: new MyApp(),
-  onGenerateRoute: (RouteSettings settings) {
-    switch (settings.name) {
-      case '/about' : return new FromRightToLeft(
-        builder: (_) => new _aboutPage.About(),
-        settings: settings,
-      );
-      case '/support': return new FromRightToLeft(
-        builder: (_) => new _supportPage.Support(),
-        settings: settings,
-      );
+void main()  {
+
+  final Reducer reducer = new CombinedReducer(
+    {
+      Home.name : Home.reducer
     }
-  },
-));
+  );
 
-class FromRightToLeft<T> extends MaterialPageRoute<T> {
-  FromRightToLeft({WidgetBuilder builder, RouteSettings settings})
-    : super(builder: builder, settings: settings);
+  final Map<String, dynamic> params = <String, dynamic>{
+    "reducer": reducer,
+    "middleware": <Middleware>[logger, thunk, futureMiddleware]
+  };
 
-  @override
-  Widget buildTransitions(
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child) {
+  final Store store = new Store(params);
 
-    if (settings.isInitialRoute)
-      return child;
-
-    return new SlideTransition(
-      child: new Container(
-        decoration: new BoxDecoration(
-          boxShadow: [
-            new BoxShadow(
-              color: Colors.black26,
-              blurRadius: 25.0,
-            )
-          ]
-        ),
-        child: child,
+  runApp(new MaterialApp(
+      title: 'Movie',
+      theme: new ThemeData(
+          primarySwatch: Colors.blueGrey,
+          scaffoldBackgroundColor: Colors.white,
+          primaryColor: Colors.blueGrey,
+          backgroundColor: Colors.white
       ),
-      position: new FractionalOffsetTween(
-        begin: const FractionalOffset(1.0, 0.0),
-        end: FractionalOffset.topLeft,
-      )
-      .animate(
-        new CurvedAnimation(parent: animation, curve: Curves.fastOutSlowIn)
-      )
-    );
-  }
-
-  @override
-  Duration get transitionDuration => const Duration(milliseconds: 400);
-
-
+      home: new MyApp(),
+      routes: <String, WidgetBuilder>{
+        '/about' : (BuildContext context) => new _aboutPage.About(),
+        '/support' : (BuildContext context) => new _supportPage.Support()
+      }
+  ));
 }
 
 class MyApp extends StatelessWidget {
