@@ -10,7 +10,7 @@ void main()  {
 
   final Reducer reducer = new CombinedReducer(
     {
-      Home.name : Home.reducer
+      HomeScreen.name : HomeScreen.reducer
     }
   );
 
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
     //Content 
     body: new PageView(
       children: <Widget>[
-        new Home()
+        new HomeScreen()
       ],
     ),
     
