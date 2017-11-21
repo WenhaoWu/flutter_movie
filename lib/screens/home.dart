@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
       state["count"]++;
     } else if (action.type is FutureFulfilledAction) {
       state["loading"] = false;
-      state["status"] = action.type.result[0].title; // Result is be the value returned when a future resolves
+      state["status"] = action.type.result[1].title; // Result is be the value returned when a future resolves
       Navigator.of(action.payload["context"]).pop();
     } else if (action.type is FutureRejectedAction) {
       state["loading"] = false;
@@ -49,13 +49,16 @@ class HomeScreen extends StatelessWidget {
         child: new Container(
           padding: const EdgeInsets.all(10.0),
           child: new Dialog(
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const CircularProgressIndicator(),
-                new Text("Loading"),
-              ],
-            ),
+            child: new Padding(
+              padding: const EdgeInsets.all(15.0),
+              child:new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const CircularProgressIndicator(),
+                  new Text("Loading"),
+                ],
+              ),
+            )
           ),
         ));
   }
@@ -136,8 +139,18 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          new Container(
+            height: 250.0,
+            child: new PageView(
+              ,
+              children: <Widget>[
+                new Container(color: Colors.red),
+                new Container(color: Colors.blue)
+              ],
+            ),
+          ),
           new StoreWrapper(builder: _buildText1),
           new Text(
             "Dispatch a FutureAction that resolves after 5 seconds",
