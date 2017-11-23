@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fludex/fludex.dart';
 import 'package:movie/model/movie.dart';
 import 'package:movie/utils/api.dart';
+import 'package:movie/utils/constans.dart';
 
 class HomeScreen extends StatelessWidget {
   static final String name = "HomeScreen";
@@ -15,25 +16,29 @@ class HomeScreen extends StatelessWidget {
   static final FludexState<Map<String, dynamic>> initState =
     new FludexState<Map<String,dynamic>>(<String, dynamic>{
       "state": "Begin",
-      "count": 0,
+      "now_playing_list": new List<Movie>(),
+      "now_playing_index": 0,
       "status": "FutureAction yet to be dispatched",
       "loading": false
     });
 
   static FludexState _reducer(FludexState _state, Action action) {
     Map<String, dynamic> state = _state.state;
-    if (action.type == "CHANGE") {
-      state["state"] = "Refreshed";
-      state["count"]++;
-    } else if (action.type is FutureFulfilledAction) {
+    if (action.type == "CHANGE_NOW_PLAYING") {
+      state["now_playing_index"]++;
+    }
+    else if (action.type is FutureFulfilledAction) {
       state["loading"] = false;
       state["status"] = action.type.result[1].title; // Result is be the value returned when a future resolves
+      state["now_playing_list"] = action.type.result;
       Navigator.of(action.payload["context"]).pop();
-    } else if (action.type is FutureRejectedAction) {
+    }
+    else if (action.type is FutureRejectedAction) {
       state["loading"] = false;
       state["status"] = "Error"; // Error is the reason the future failed
       Navigator.of(action.payload["context"]).pop();
-    } else if (action.type == "FUTURE_DISPATCHED") {
+    }
+    else if (action.type == "FUTURE_DISPATCHED") {
       state["status"] = action.payload["result"];
       state["loading"] = true;
       _onLoading(action.payload["context"]);
@@ -63,30 +68,6 @@ class HomeScreen extends StatelessWidget {
         ));
   }
 
-  void _change() {
-    new Store(null).dispatch(new Action<String, Object>(type: "CHANGE"));
-  }
-
-  void _delayedAction(BuildContext context) {
-
-    final Future<String> dummyFuture = new Future<String>.delayed(
-        new Duration(seconds: 5), () => "FutureAction Resolved");
-
-    // An Action of type [FutureAction] that takes a Future
-    // to be resolved and a initialAction which is dispatched immedietly.
-    final Action asyncAction = new Action(
-        type: new FutureAction<String>(
-            dummyFuture,
-            initialAction: new Action(type: "FUTURE_DISPATCHED", payload: {
-              "result": "FutureAction Dispatched",
-              "context": context
-            })),
-        payload: {"context": context});
-
-    // Dispatching a FutureAction
-    new Store(null).dispatch(asyncAction);
-  }
-
   void _fetchNowPlayingAction(BuildContext context, int page) {
 
     final Future<List<Movie>> moviesFuture = fetchNowPlaying(page);
@@ -110,18 +91,6 @@ class HomeScreen extends StatelessWidget {
   }
 
   // Builds a Text widget based on state
-  Widget _buildText1() {
-
-    final Map<String, dynamic> state = new Store(null).state[HomeScreen.name];
-    final String value = state["state"] + " " + state["count"].toString();
-
-    return new Container(
-      padding: const EdgeInsets.all(20.0),
-      child: new Text(value),
-    );
-  }
-
-  // Builds a Text widget based on state
   Widget _buildText2() {
 
     final bool loading = new Store(null).state[HomeScreen.name]["loading"];
@@ -135,35 +104,73 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildNowPlaying() {
+    List<Movie> nowPlayList = new Store(null).state[HomeScreen.name]['now_playing_list'];
+
+    print(nowPlayList.length);
+
+    return new Container(
+      height: 220.0,
+      child: new PageView.builder(
+          itemCount: nowPlayList.length,
+          itemBuilder: (BuildContext context, int index)=>
+          new Container(
+            decoration: new BoxDecoration(
+              image: new DecorationImage(
+                image: new NetworkImage(TMDB_IMAGE_342+nowPlayList[index].posterPath),
+                fit: BoxFit.cover,
+                colorFilter: new ColorFilter.mode(Colors.black26, BlendMode.dstIn)
+              )
+            ),
+            child: new Center(
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    new Container(
+                      height: 190.0,
+                      width: 140.0,
+                      decoration: new BoxDecoration(
+                        image: new DecorationImage(
+                          image: new NetworkImage(TMDB_IMAGE_185+nowPlayList[index].posterPath)
+                        )
+                      ),
+                    ),
+                    new Container(
+                      width: 200.0,
+                      child: new Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          new Text(
+                            nowPlayList[index].title,
+                            style: new TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+            )
+          )
+      ),
+    );
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: new Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          new Container(
-            height: 250.0,
-            child: new PageView(
-              ,
-              children: <Widget>[
-                new Container(color: Colors.red),
-                new Container(color: Colors.blue)
-              ],
-            ),
-          ),
-          new StoreWrapper(builder: _buildText1),
-          new Text(
-            "Dispatch a FutureAction that resolves after 5 seconds",
-            textAlign: TextAlign.center,
-          ),
+          new StoreWrapper(builder: _buildNowPlaying),
           new StoreWrapper(builder: _buildText2),
-          new FlatButton(
-              onPressed: () => _fetchNowPlayingAction(context, 1),
-              child: new Text("Dispatch a future action"))
         ],
       ),
       floatingActionButton: new FloatingActionButton(
-        onPressed: _change,
+        onPressed: ()=>_fetchNowPlayingAction(context, 1),
         tooltip: 'Refresh',
         child: new Icon(Icons.refresh),
       ),

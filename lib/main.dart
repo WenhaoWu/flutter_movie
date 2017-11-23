@@ -24,10 +24,10 @@ void main()  {
   runApp(new MaterialApp(
       title: 'Movie',
       theme: new ThemeData(
-          primarySwatch: Colors.blueGrey,
-          scaffoldBackgroundColor: Colors.white,
-          primaryColor: Colors.blueGrey,
-          backgroundColor: Colors.white
+          primarySwatch: Colors.red,
+          scaffoldBackgroundColor: Colors.black,
+          primaryColor: Colors.black,
+          backgroundColor: Colors.black
       ),
       home: new MyApp(),
       routes: <String, WidgetBuilder>{
