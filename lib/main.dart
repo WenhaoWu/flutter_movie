@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:movie/screens/home.dart';
 
-import './screens/about.dart' as _aboutPage;
 import './screens/support.dart' as _supportPage;
 
 void main()  {
 
   final Reducer reducer = new CombinedReducer(
     {
-      HomeScreen.name : HomeScreen.reducer
+      HomeScreen.name : HomeScreen.reducer,
     }
   );
 
@@ -31,7 +30,6 @@ void main()  {
       ),
       home: new MyApp(),
       routes: <String, WidgetBuilder>{
-        '/about' : (BuildContext context) => new _aboutPage.About(),
         '/support' : (BuildContext context) => new _supportPage.Support()
       }
   ));
@@ -45,7 +43,7 @@ class MyApp extends StatelessWidget {
     //App Bar
     appBar: new AppBar(
       title: new Text(
-        'Home',
+        'Movies',
         style: new TextStyle(
           fontSize: Theme.of(context).platform == TargetPlatform.iOS ? 17.0 : 20.0,
         ),

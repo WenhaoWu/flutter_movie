@@ -19,10 +19,29 @@ Future<Movie> fetchMovie(String id) async {
   return new Movie.fromMap(container);
 }
 
-Future<List<Movie>> fetchNowPlaying(int page) async {
+Future<List<Movie>> fetchMoviesNowPlaying(int page) async {
 
   var httpClient = createHttpClient();
   var url = "$TMDB_URL/movie/now_playing?api_key=$TMDB_API_KEY&page=$page";
+  var response = await httpClient.get(url);
+
+  final String jsonBody = response.body;
+
+  final container = JSON.decode(jsonBody);
+
+  final List<Map<String,dynamic>> result = container['results'];
+
+  List<Movie> list = new List();
+
+  result.forEach((map) => list.add(new Movie.fromMap(map)));
+
+  return list;
+}
+
+
+Future<List<Movie>> fetchMoviesPopular(int page) async {
+  var httpClient = createHttpClient();
+  var url = "$TMDB_URL/movie/popular?api_key=$TMDB_API_KEY&page=$page";
   var response = await httpClient.get(url);
 
   final String jsonBody = response.body;
