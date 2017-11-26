@@ -7,7 +7,6 @@ class CardTwo {
 
   static Widget buildCardTwo(BuildContext context, Movie movie)=>
       new Container(
-          height: 200.0,
           width: 140.0,
           margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
           alignment: Alignment.bottomCenter,
@@ -16,7 +15,7 @@ class CardTwo {
                 image: new NetworkImage(TMDB_IMAGE_342+movie.posterPath),
                 fit: BoxFit.cover,
             ),
-            borderRadius: new BorderRadius.all(const Radius.circular(10.0))
+            borderRadius: new BorderRadius.all(const Radius.circular(3.0))
           ),
           child: new Container(
             width: 140.0,
@@ -25,7 +24,7 @@ class CardTwo {
             child: new Text(movie.title, textAlign: TextAlign.center,),
             decoration: new BoxDecoration(
               color: Colors.white,
-              borderRadius: new BorderRadius.vertical(bottom: const Radius.circular(10.0))
+              borderRadius: new BorderRadius.vertical(bottom: const Radius.circular(3.0))
             ),
           )
       );
