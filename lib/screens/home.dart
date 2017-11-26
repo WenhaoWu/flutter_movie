@@ -102,7 +102,7 @@ class HomeScreen extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: popularList.length,
         itemBuilder: (BuildContext context, int index)=>
-            CardTwo.buildCardTwo(context, popularList[index])
+            new CardTwo(popularList[index])
       ),
     );
   }
