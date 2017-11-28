@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
-class Movie extends StatelessWidget {
+class MovieDetail extends StatelessWidget {
+
+  final String movieID;
+
+  MovieDetail({
+    @required this.movieID
+  });
 
   @override
   Widget build(BuildContext context) => new Scaffold(
@@ -8,7 +15,7 @@ class Movie extends StatelessWidget {
     //App bar
     appBar: new AppBar(
       title: new Text(
-        'Support',
+        movieID,
         style: new TextStyle(
             fontSize: Theme.of(context).platform == TargetPlatform.iOS? 17.0 : 20.0
         ),

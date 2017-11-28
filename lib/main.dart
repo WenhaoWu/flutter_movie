@@ -22,20 +22,38 @@ void main()  {
 
   final Store store = new Store(params);
 
-  runApp(new MaterialApp(
-      title: 'Movie',
-      theme: new ThemeData(
-          primarySwatch: Colors.red,
-          scaffoldBackgroundColor: Colors.black,
-          primaryColor: Colors.black,
-          backgroundColor: Colors.black
-      ),
-      home: new MyApp(),
-      routes: <String, WidgetBuilder>{
-        '/support' : (BuildContext context) => new _supportPage.Support(),
-        '/movie/*' : (BuildContext context) => new _movieDetail.Movie()
-      }
-  ));
+  _generateRoute(RouteSettings settings) {
+    final List<String> path = settings.name.split('/');
+    String root = path[1];
+
+    switch(root){
+      case 'movies':
+        String movieID = path[2];
+        return new MaterialPageRoute<Null>(
+            settings: settings,
+            builder: (BuildContext context)=> new _movieDetail.MovieDetail(movieID:movieID)
+        );
+    }
+
+    return null;
+  }
+
+  MaterialApp app = new MaterialApp(
+    title: 'Movie',
+    theme: new ThemeData(
+        primarySwatch: Colors.red,
+        scaffoldBackgroundColor: Colors.black,
+        primaryColor: Colors.black,
+        backgroundColor: Colors.black
+    ),
+    home: new MyApp(),
+    routes: <String, WidgetBuilder>{
+      '/support' : (BuildContext context) => new _supportPage.Support(),
+    },
+    onGenerateRoute: _generateRoute,
+  );
+
+  runApp(app);
 }
 
 class MyApp extends StatelessWidget {

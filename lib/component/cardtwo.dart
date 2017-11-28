@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 import 'package:movie/model/movie.dart';
 import 'package:movie/utils/constans.dart';
+import 'package:movie/screens/movie.dart';
 
 
 class CardTwo extends StatefulWidget {
 
-  Movie _movie;
+  final Movie movie;
 
-  CardTwo(Movie movie){
-    _movie = movie;
-  }
+  CardTwo({
+    @required this.movie
+  });
 
   @override
-  _CardTwoState createState() => new _CardTwoState(_movie);
+  _CardTwoState createState() => new _CardTwoState(movie);
 }
 
 class _CardTwoState extends State<CardTwo> {
@@ -46,7 +48,9 @@ class _CardTwoState extends State<CardTwo> {
         onCardTapUp();
       },
       onTap: (){
-        Navigator.pushNamed(context, '/movie');
+        String id = _movie.id;
+        Navigator.push(context, new MaterialPageRoute(
+            builder: (BuildContext context)=> new MovieDetail(movieID:id)));
       },
       child: new Container(
         width: 140.0,
