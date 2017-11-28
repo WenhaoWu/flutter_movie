@@ -1,9 +1,11 @@
 import 'package:fludex/fludex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:movie/model/movie.dart';
 import 'package:movie/screens/home.dart';
 
 import './screens/support.dart' as _supportPage;
+import './screens/movie.dart' as _movieDetail;
 
 void main()  {
 
@@ -30,7 +32,8 @@ void main()  {
       ),
       home: new MyApp(),
       routes: <String, WidgetBuilder>{
-        '/support' : (BuildContext context) => new _supportPage.Support()
+        '/support' : (BuildContext context) => new _supportPage.Support(),
+        '/movie/*' : (BuildContext context) => new _movieDetail.Movie()
       }
   ));
 }

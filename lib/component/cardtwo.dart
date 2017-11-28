@@ -45,6 +45,9 @@ class _CardTwoState extends State<CardTwo> {
       onTapUp: (TapUpDetails detail){
         onCardTapUp();
       },
+      onTap: (){
+        Navigator.pushNamed(context, '/movie');
+      },
       child: new Container(
         width: 140.0,
         margin: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
