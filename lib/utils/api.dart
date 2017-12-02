@@ -3,9 +3,10 @@ import 'dart:convert';
 
 import 'package:movie/model/movie.dart';
 import 'package:flutter/services.dart';
+import 'package:movie/model/movie_detail.dart';
 import 'package:movie/utils/constans.dart';
 
-Future<Movie> fetchMovie(String id) async {
+Future<MovieDetail> fetchMovie(String id) async {
 
   var httpClient = createHttpClient();
   var url = "$TMDB_URL/movie/$id?api_key=$TMDB_API_KEY&append_to_response=casts,images,videos";
@@ -14,7 +15,7 @@ Future<Movie> fetchMovie(String id) async {
   final String jsonBody = response.body;
 
   final container = JSON.decode(jsonBody);
-  return new Movie.fromMap(container);
+  return MovieDetail.fromMap(container);
 }
 
 Future<List<Movie>> fetchMoviesNowPlaying(int page) async {
@@ -22,6 +23,7 @@ Future<List<Movie>> fetchMoviesNowPlaying(int page) async {
   var httpClient = createHttpClient();
   var url = "$TMDB_URL/movie/now_playing?api_key=$TMDB_API_KEY&page=$page";
   var response = await httpClient.get(url);
+  print(url);
 
   final String jsonBody = response.body;
 
@@ -35,7 +37,6 @@ Future<List<Movie>> fetchMoviesNowPlaying(int page) async {
 
   return list;
 }
-
 
 Future<List<Movie>> fetchMoviesPopular(int page) async {
   var httpClient = createHttpClient();

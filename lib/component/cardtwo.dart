@@ -3,7 +3,6 @@ import 'package:meta/meta.dart';
 import 'package:movie/model/movie.dart';
 import 'package:movie/screens/second.dart';
 import 'package:movie/utils/constans.dart';
-import 'package:movie/screens/moviedetail.dart';
 
 
 class CardTwo extends StatefulWidget {
@@ -51,7 +50,7 @@ class _CardTwoState extends State<CardTwo> {
       onTap: (){
         String id = _movie.id;
         Navigator.push(context, new MaterialPageRoute(
-            builder: (BuildContext context)=> new SecondPage()));
+            builder: (BuildContext context)=> new SecondPage(movieID: id)));
       },
       child: new Container(
         width: 140.0,
