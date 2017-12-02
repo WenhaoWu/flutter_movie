@@ -1,42 +1,26 @@
 import 'package:fludex/fludex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:movie/model/movie.dart';
 import 'package:movie/screens/home.dart';
+import 'package:movie/screens/second.dart';
 
 import './screens/support.dart' as _supportPage;
-import './screens/movie.dart' as _movieDetail;
 
 void main()  {
 
-  final Reducer reducer = new CombinedReducer(
+  final Reducer reducers = new CombinedReducer(
     {
-      HomeScreen.name : HomeScreen.reducer,
+      HomeScreen.NAME : HomeScreen.reducer,
+      SecondPage.NAME : SecondPage.reducer
     }
   );
 
   final Map<String, dynamic> params = <String, dynamic>{
-    "reducer": reducer,
+    "reducer": reducers,
     "middleware": <Middleware>[logger, thunk, futureMiddleware]
   };
 
   final Store store = new Store(params);
-
-  _generateRoute(RouteSettings settings) {
-    final List<String> path = settings.name.split('/');
-    String root = path[1];
-
-    switch(root){
-      case 'movies':
-        String movieID = path[2];
-        return new MaterialPageRoute<Null>(
-            settings: settings,
-            builder: (BuildContext context)=> new _movieDetail.MovieDetail(movieID:movieID)
-        );
-    }
-
-    return null;
-  }
 
   MaterialApp app = new MaterialApp(
     title: 'Movie',
@@ -50,7 +34,6 @@ void main()  {
     routes: <String, WidgetBuilder>{
       '/support' : (BuildContext context) => new _supportPage.Support(),
     },
-    onGenerateRoute: _generateRoute,
   );
 
   runApp(app);

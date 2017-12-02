@@ -10,36 +10,41 @@ import 'package:movie/utils/api.dart';
 import 'package:movie/utils/constans.dart';
 
 class HomeScreen extends StatelessWidget {
-  static final String name = "HomeScreen";
+  static const String NAME = "HomeScreen";
+
+  static const String HOME_STATE = "HomeState";
+  static const String NOW_PLAYING_LIST = "NowPlayingList";
+  static const String POPULAR_LIST = "PopularList";
 
   static final Reducer reducer =
-  new Reducer(initState: initState, reduce: _reducer);
+    new Reducer(initState: homeInitState, reduce: _homeReducer);
 
-  static final FludexState<Map<String, dynamic>> initState =
+  static final FludexState<Map<String, dynamic>> homeInitState =
     new FludexState<Map<String,dynamic>>(<String, dynamic>{
-      "state": "Begin",
-      "now_playing_list": new List<Movie>(),
-      "popular_list" : new List<Movie>()
+      HOME_STATE: "Begin",
+      NOW_PLAYING_LIST: new List<Movie>(),
+      POPULAR_LIST : new List<Movie>()
     });
 
-  static FludexState _reducer(FludexState _state, Action action) {
+  static FludexState _homeReducer(FludexState _state, Action action) {
     Map<String, dynamic> state = _state.state;
+
     if (action.type is FutureFulfilledAction) {
       String purpose = action.payload["purpose"];
       if (purpose == "now_playing"){
-        state["now_playing_list"] = action.type.result;
-        state["state"] = "Done1";
+        state[NOW_PLAYING_LIST] = action.type.result;
+        state[HOME_STATE] = "Done1";
       }
       else if (purpose == "popular"){
-        state["popular"] = action.type.result;
-        state["state"] = "Done2";
+        state[POPULAR_LIST] = action.type.result;
+        state[HOME_STATE] = "Done2";
       }
     }
     else if (action.type is FutureRejectedAction) {
-      state["state"] = "Error";
+      state[HOME_STATE] = "Error";
     }
     else if (action.type == "FUTURE_DISPATCHED") {
-      state["state"] = "Fetching";
+      state[HOME_STATE] = "Fetching";
     }
 
     return new FludexState<Map<String,dynamic>>(state);
@@ -80,7 +85,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildNowPlaying() {
-    List<Movie> nowPlayList = new Store(null).state[HomeScreen.name]['now_playing_list'];
+    List<Movie> nowPlayList = new Store(null).state[HomeScreen.NAME][NOW_PLAYING_LIST];
 
     return new Container(
       height: 220.0,
@@ -94,7 +99,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildPopular() {
-    List<Movie> popularList = new Store(null).state[HomeScreen.name]['popular'];
+    List<Movie> popularList = new Store(null).state[HomeScreen.NAME][POPULAR_LIST];
 
     return new Container(
       height: 210.0,
@@ -108,7 +113,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _stateSwitcher(){
-    String state = new Store(null).state[HomeScreen.name]['state'];
+    String state = new Store(null).state[HomeScreen.NAME][HOME_STATE];
 
     if (state == "Begin"){
       _fetchNowPlayingAction(1);

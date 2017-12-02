@@ -7,15 +7,13 @@ import 'package:movie/utils/constans.dart';
 
 Future<Movie> fetchMovie(String id) async {
 
-  JsonDecoder _decoder = new JsonDecoder();
-
   var httpClient = createHttpClient();
   var url = "$TMDB_URL/movie/$id?api_key=$TMDB_API_KEY&append_to_response=casts,images,videos";
   var response = await httpClient.get(url);
 
   final String jsonBody = response.body;
 
-  final container = _decoder.convert(jsonBody);
+  final container = JSON.decode(jsonBody);
   return new Movie.fromMap(container);
 }
 
