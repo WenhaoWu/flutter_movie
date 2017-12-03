@@ -23,7 +23,6 @@ Future<List<Movie>> fetchMoviesNowPlaying(int page) async {
   var httpClient = createHttpClient();
   var url = "$TMDB_URL/movie/now_playing?api_key=$TMDB_API_KEY&page=$page";
   var response = await httpClient.get(url);
-  print(url);
 
   final String jsonBody = response.body;
 

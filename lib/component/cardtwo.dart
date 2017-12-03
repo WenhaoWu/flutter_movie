@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:movie/model/movie.dart';
-import 'package:movie/screens/second.dart';
+import 'package:movie/screens/movie_page.dart';
 import 'package:movie/utils/constans.dart';
 
 
@@ -50,7 +50,7 @@ class _CardTwoState extends State<CardTwo> {
       onTap: (){
         String id = _movie.id;
         Navigator.push(context, new MaterialPageRoute(
-            builder: (BuildContext context)=> new SecondPage(movieID: id)));
+            builder: (BuildContext context)=> new MoviePage(movieID: id)));
       },
       child: new Container(
         width: 140.0,

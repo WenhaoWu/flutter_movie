@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:fludex/fludex.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:movie/component/cardthree.dart';
 import 'package:movie/model/movie_detail.dart';
 import 'package:movie/utils/api.dart';
+import 'package:path/path.dart';
 
-class SecondPage extends StatelessWidget {
+class MoviePage extends StatelessWidget {
 
   static const String NAME = "Seconde";
 
@@ -26,7 +28,7 @@ class SecondPage extends StatelessWidget {
 
   final String movieID;
 
-  SecondPage({
+  MoviePage({
     @required this.movieID,
   });
 
@@ -70,15 +72,27 @@ class SecondPage extends StatelessWidget {
   }
 
   Widget _buildMovie(){
-    MovieDetail movie = new Store(null).state[SecondPage.NAME][MOVIE_DETAIL_MOVIE];
+    return new ListView(
+      children: <Widget>[
+        new StoreWrapper(builder: _buildUpper),
+      ],
+    );
+  }
 
-    return new Center(
-      child: new Text(movie.title, style: new TextStyle(color: Colors.white)),
+
+  Widget _buildUpper() {
+    MovieDetail movieDetail = new Store(null).state[MoviePage.NAME][MOVIE_DETAIL_MOVIE];
+
+    return new Container(
+      height: 400.0,
+      color: Colors.blue,
+      alignment: AlignmentDirectional.topStart,
+      child: CardThree.buildCardThree(movieDetail)
     );
   }
 
   Widget _stateSwitcher() {
-    final Map<String, dynamic> state = new Store(null).state[SecondPage.NAME];
+    final Map<String, dynamic> state = new Store(null).state[MoviePage.NAME];
 
     String movieState = state[MOVIE_DETAIL_STATE];
     String stateMovieID = state[MOVIE_DETAIL_MOVIE_ID];

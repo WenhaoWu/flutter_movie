@@ -1,8 +1,8 @@
 import 'package:fludex/fludex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:movie/screens/home.dart';
-import 'package:movie/screens/second.dart';
+import 'package:movie/screens/home_page.dart';
+import 'package:movie/screens/movie_page.dart';
 
 import './screens/support.dart' as _supportPage;
 
@@ -11,7 +11,7 @@ void main()  {
   final Reducer reducers = new CombinedReducer(
     {
       HomeScreen.NAME : HomeScreen.reducer,
-      SecondPage.NAME : SecondPage.reducer
+      MoviePage.NAME : MoviePage.reducer
     }
   );
 
