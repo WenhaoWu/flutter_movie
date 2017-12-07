@@ -7,6 +7,8 @@ class MovieDetail {
   final String title;
   final String tagline;
   final String overview;
+  final String genres;
+  final double rate;
   final List<String> backdrops;
   final List<Cast> casts;
 
@@ -16,6 +18,8 @@ class MovieDetail {
     this.title,
     this.tagline,
     this.overview,
+    this.genres,
+    this.rate,
     this.backdrops,
     this.casts
   });
@@ -26,19 +30,27 @@ class MovieDetail {
     String title = map['title'];
     String tagline = map['tagline'];
     String overview = map['overview'];
+    double rate = map['vote_average'];
 
     Map<String, dynamic> images = map['images'];
-    List<String> backdrops = images['backdrops'];
+    List<Map<String, dynamic>> backdrops = images['backdrops'];
+    List<String> backdropFiles = new List();
+    backdrops.forEach((map){backdropFiles.add(map['file_path']);});
 
     Map<String, dynamic> cast = map['casts'];
     List<Map<String, dynamic>> casts = cast['cast'];
-
     List<Cast> castList = new List();
     casts.forEach((map){castList.add(new Cast.fromMap(map));});
+
+    List<Map<String, dynamic>> genres = map['genres'];
+    String genreBuilder = "";
+    genres.forEach((map){genreBuilder+="${map['name']} ";});
+
 
     return new MovieDetail(
         id: id, posterPath: posterPath, title: title,
         tagline: tagline, overview: overview,
-        backdrops: backdrops, casts: castList);
+        rate: rate, backdrops: backdropFiles,
+        casts: castList, genres: genreBuilder);
   }
 }

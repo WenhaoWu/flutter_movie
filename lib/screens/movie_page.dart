@@ -85,7 +85,6 @@ class MoviePage extends StatelessWidget {
 
     return new Container(
       height: 400.0,
-      color: Colors.blue,
       alignment: AlignmentDirectional.topStart,
       child: CardThree.buildCardThree(movieDetail)
     );
