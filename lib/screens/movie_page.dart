@@ -72,27 +72,53 @@ class MoviePage extends StatelessWidget {
   }
 
   Widget _buildMovie(){
-    return new ListView(
-      children: <Widget>[
-        new StoreWrapper(builder: _buildUpper),
-        _buildTabBar(),
 
-      ],
+    return new Scaffold(
+      body: new Column(
+        children: <Widget>[
+          new StoreWrapper(builder: _buildUpper),
+          _buildTabBar(),
+        ],
+      )
     );
   }
 
   Widget _buildTabBar() {
 
-    return new DefaultTabController(
-        length: 3,
-        child:new TabBar(
-          isScrollable: false,
-          tabs: [
-            new Tab(text: "Tab1", icon: new Icon(Icons.star),),
-            new Tab(text: "Tab2", icon: new Icon(Icons.star),),
-            new Tab(text: "Tab3", icon: new Icon(Icons.star),),
-          ],
+    return new Expanded(
+        child: new DefaultTabController(
+            length: 3,
+            child: new Column(
+              children: <Widget>[
+                new TabBar(
+                  isScrollable: false,
+                  tabs: [
+                    new Tab(text: "INFO"),
+                    new Tab(text: "CASTS"),
+                    new Tab(text: "TRAILERS"),
+                  ],
+                ),
+                _buildTabBarView()
+              ],
+            )
         )
+    );
+  }
+
+  Widget _buildTabBarView() {
+    return new Expanded(
+      child: new Container(
+        decoration: new BoxDecoration(
+            border: new Border.all(color: Colors.white)
+        ),
+        child: new TabBarView(
+            children: [
+              new Center(child: new Text("Tab1", style: new TextStyle(color: Colors.white),),),
+              new Center(child: new Text("Tab2", style: new TextStyle(color: Colors.white),),),
+              new Center(child: new Text("Tab3", style: new TextStyle(color: Colors.white),),),
+            ]
+        ),
+      ),
     );
   }
 
@@ -137,4 +163,5 @@ class MoviePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new StoreWrapper(builder: _stateSwitcher);
   }
+
 }
