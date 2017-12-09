@@ -75,10 +75,26 @@ class MoviePage extends StatelessWidget {
     return new ListView(
       children: <Widget>[
         new StoreWrapper(builder: _buildUpper),
+        _buildTabBar(),
+
       ],
     );
   }
 
+  Widget _buildTabBar() {
+
+    return new DefaultTabController(
+        length: 3,
+        child:new TabBar(
+          isScrollable: false,
+          tabs: [
+            new Tab(text: "Tab1", icon: new Icon(Icons.star),),
+            new Tab(text: "Tab2", icon: new Icon(Icons.star),),
+            new Tab(text: "Tab3", icon: new Icon(Icons.star),),
+          ],
+        )
+    );
+  }
 
   Widget _buildUpper() {
     MovieDetail movieDetail = new Store(null).state[MoviePage.NAME][MOVIE_DETAIL_MOVIE];
