@@ -26,12 +26,6 @@ class MoviePage extends StatelessWidget {
     MOVIE_DETAIL_MOVIE : null
   });
 
-  final String movieID;
-
-  MoviePage({
-    @required this.movieID,
-  });
-
   static FludexState _reducer(FludexState _state, Action action) {
     Map<String, dynamic> state = _state.state;
 
@@ -53,6 +47,12 @@ class MoviePage extends StatelessWidget {
 
     return new FludexState<Map<String,dynamic>>(state);
   }
+
+  final String movieID;
+
+  MoviePage({
+    @required this.movieID,
+  });
 
   void _dispatchFetchMovie(){
     Future<MovieDetail> movieFuture = fetchMovie(movieID);

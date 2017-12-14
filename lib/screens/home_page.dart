@@ -6,6 +6,7 @@ import 'package:fludex/fludex.dart';
 import 'package:movie/component/cardone.dart';
 import 'package:movie/component/cardtwo.dart';
 import 'package:movie/model/movie.dart';
+import 'package:movie/screens/movie_list_page.dart';
 import 'package:movie/utils/api.dart';
 import 'package:movie/utils/constans.dart';
 
@@ -17,16 +18,16 @@ class HomeScreen extends StatelessWidget {
   static const String POPULAR_LIST = "PopularList";
 
   static final Reducer reducer =
-    new Reducer(initState: homeInitState, reduce: _homeReducer);
+    new Reducer(initState: _initState, reduce: _reducer);
 
-  static final FludexState<Map<String, dynamic>> homeInitState =
+  static final FludexState<Map<String, dynamic>> _initState =
     new FludexState<Map<String,dynamic>>(<String, dynamic>{
       HOME_STATE: "Begin",
       NOW_PLAYING_LIST: new List<Movie>(),
       POPULAR_LIST : new List<Movie>()
     });
 
-  static FludexState _homeReducer(FludexState _state, Action action) {
+  static FludexState _reducer(FludexState _state, Action action) {
     Map<String, dynamic> state = _state.state;
 
     if (action.type is FutureFulfilledAction) {
@@ -112,7 +113,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _stateSwitcher(){
+  Widget _stateSwitcher(BuildContext context){
     String state = new Store(null).state[HomeScreen.NAME][HOME_STATE];
 
     if (state == "Begin"){
@@ -155,16 +156,22 @@ class HomeScreen extends StatelessWidget {
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                new Row(
-                  children: <Widget>[
-                    new Icon(Icons.play_arrow, color: Colors.white, size: 28.0,),
-                    new Padding(padding:
+                new GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, new MaterialPageRoute(
+                        builder: (BuildContext context)=> new MovieListPage(mode: ListMode.NowPlaying)));
+                  },
+                  child: new Row(
+                    children: <Widget>[
+                      new Icon(Icons.play_arrow, color: Colors.white, size: 28.0,),
+                      new Padding(padding:
                       const EdgeInsets.only(left: 10.0),
-                      child:  new Text("Now Playing", style: new TextStyle(
-                          fontSize: 18.0, color: Colors.white
-                      ))
-                    )
-                  ],
+                          child:  new Text("Now Playing", style: new TextStyle(
+                              fontSize: 18.0, color: Colors.white
+                          ))
+                      )
+                    ],
+                  ),
                 ),
                 new Row(
                   children: <Widget>[
@@ -207,6 +214,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StoreWrapper(builder: _stateSwitcher);
+    return new StoreWrapper(builder: () =>_stateSwitcher(context));
   }
 }
