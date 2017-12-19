@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:movie/component/cardfour.dart';
+import 'package:movie/component/cardone.dart';
 import 'package:fludex/fludex.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +30,7 @@ class MovieListPage extends StatelessWidget {
   static FludexState _reducer(FludexState _state, Action action) {
     Map<String, dynamic> state = _state.state;
 
-    if (action.type == "FUTURE_BEGIN"){
+    if (action.type == "SEARCH_BEGIN"){
       state[LIST_STATE] = "Fetching";
     }
     else if (action.type is FutureFulfilledAction){
@@ -51,7 +53,7 @@ class MovieListPage extends StatelessWidget {
     @required this.mode,
   });
 
-  Widget _stateSwitcher() {
+  Widget _stateSwitcher(BuildContext context) {
     final Map<String, dynamic> state = new Store(null).state[MovieListPage.NAME];
 
     String listState = state[LIST_STATE];
@@ -65,7 +67,7 @@ class MovieListPage extends StatelessWidget {
       );
     }
     else if (listState == "Success"){
-      return new StoreWrapper(builder: _buildList);
+      return new StoreWrapper(builder: ()=>_buildList(context));
     }
 
     return new Center(
@@ -106,28 +108,19 @@ class MovieListPage extends StatelessWidget {
       ),
 
       //Content
-      body: new PageView(
-        children: <Widget>[
-          new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Text('Support page content')
-            ],
-          )
-        ],
-      ),
+      body: new StoreWrapper(builder: ()=>_stateSwitcher(context))
     );
 
   }
 
   void _dispatchFetchList() {
-    Future<List<Movie>> moviesFuture = fetchMoviesPopular(1);
+    final Future<List<Movie>> moviesFuture = fetchMoviesPopular(1);
 
     final Action asyncAction = new Action(
         type: new FutureAction<List<Movie>>(
             moviesFuture,
             initialAction: new Action(
-                type: "FUTURE_BEGIN",
+                type: "SEARCH_BEGIN"
             )
         ),
         payload:{"purpose" : "Search"}
@@ -136,10 +129,18 @@ class MovieListPage extends StatelessWidget {
     new Store(null).dispatch(asyncAction);
   }
 
+  Widget _buildList(BuildContext context) {
 
-  Widget _buildList() {
-    return new Center(
-      child: new Text("Success", style: new TextStyle(color: Colors.white),),
+    List<Movie> movies = new Store(null).state[MovieListPage.NAME][LIST_LIST];
+
+    return new ListView.builder(
+        itemCount: movies.length,
+        itemBuilder: (BuildContext context, int index) {
+          return new Container(
+            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+            child: CardFour.buildCarFour(context, movies[index]),
+          );
+        }
     );
   }
 }

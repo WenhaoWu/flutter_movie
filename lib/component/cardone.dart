@@ -5,25 +5,28 @@ import 'package:movie/utils/constans.dart';
 
 class CardOne {
 
-  static Widget buildCardOne(BuildContext context, Movie movie)=>
+  static Widget buildCardOne(BuildContext context, Movie movie,{bool whiteBackground = false})=>
     new Container(
       decoration: new BoxDecoration(
-          image: new DecorationImage(
-              image: new NetworkImage(TMDB_IMAGE_342+movie.posterPath),
-              fit: BoxFit.cover,
-              colorFilter: new ColorFilter.mode(Colors.black26, BlendMode.dstIn)
-          )
+        image: !whiteBackground
+            ? new DecorationImage(
+                  image: new NetworkImage(TMDB_IMAGE_342+movie.posterPath),
+                  fit: BoxFit.cover,
+                  colorFilter: new ColorFilter.mode(Colors.black26, BlendMode.dstIn)
+              )
+            : null,
+        color: whiteBackground ? Colors.white : null
       ),
       child: new Center(
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               new Container(
-                height: 190.0,
                 width: 140.0,
                 decoration: new BoxDecoration(
                     image: new DecorationImage(
-                        image: new NetworkImage(TMDB_IMAGE_185+movie.posterPath)
+                      image: new NetworkImage(TMDB_IMAGE_154+movie.posterPath),
+                      fit: BoxFit.fitHeight
                     )
                 ),
               ),
