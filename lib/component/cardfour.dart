@@ -14,6 +14,7 @@ class CardFour {
           child: new Center(
               child: new Row(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   new Container(
                     height: 185.0,
@@ -27,49 +28,49 @@ class CardFour {
                       borderRadius: new BorderRadius.circular(5.0)
                     ),
                   ),
-                  new Container(
-                    width: 210.0,
-                    height: 185.0,
-                    padding: const EdgeInsets.all(10.0),
-                    child: new Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        new Text(
-                          movie.title,
-                          style: new TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold
+                  new Expanded(
+                    child: new Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child: new Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          new Text(
+                            movie.title,
+                            style: new TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
-                        ),
-                        new Text(
-                          movie.releaseDate.substring(0,4),
-                          style: new TextStyle(
-                              fontSize: 12.0
+                          new Text(
+                            movie.releaseDate.substring(0,4),
+                            style: new TextStyle(
+                                fontSize: 12.0
+                            ),
                           ),
-                        ),
-                        new Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
-                          child: new Row(
-                            children: <Widget>[
-                              new Icon(Icons.star, size: 14.0,color: Colors.orange,),
-                              new Container(width: 5.0,),
-                              new Text(movie.rate.toString(), style: new TextStyle(
-                                  fontSize: 12.0
-                              ),)
-                            ],
+                          new Container(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+                            child: new Row(
+                              children: <Widget>[
+                                new Icon(Icons.star, size: 14.0,color: Colors.orange,),
+                                new Container(width: 5.0,),
+                                new Text(movie.rate.toString(), style: new TextStyle(
+                                    fontSize: 12.0
+                                ),)
+                              ],
+                            ),
                           ),
-                        ),
-                        new Text(
-                          movie.overview,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: new TextStyle(
-                            fontSize: 14.0,
+                          new Text(
+                            movie.overview,
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
+                            style: new TextStyle(
+                              fontSize: 14.0,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    )
                   ),
                 ],
               )

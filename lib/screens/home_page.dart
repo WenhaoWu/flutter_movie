@@ -173,27 +173,39 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                new Row(
-                  children: <Widget>[
-                    new Icon(Icons.trending_up, color: Colors.white, size: 28.0,),
-                    new Padding(padding:
-                    const EdgeInsets.only(left: 10.0),
-                        child:  new Text("Top Rated", style: new TextStyle(
-                            fontSize: 18.0, color: Colors.white
-                        ))
-                    )
-                  ],
+                new GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, new MaterialPageRoute(
+                        builder: (BuildContext context)=> new MovieListPage(mode: ListMode.TopRated)));
+                  },
+                  child: new Row(
+                    children: <Widget>[
+                      new Icon(Icons.trending_up, color: Colors.white, size: 28.0,),
+                      new Padding(padding:
+                      const EdgeInsets.only(left: 10.0),
+                          child:  new Text("Top Rated", style: new TextStyle(
+                              fontSize: 18.0, color: Colors.white
+                          ))
+                      )
+                    ],
+                  ),
                 ),
-                new Row(
-                  children: <Widget>[
-                    new Icon(Icons.voicemail, color: Colors.white, size: 28.0,),
-                    new Padding(padding:
-                    const EdgeInsets.only(left: 10.0),
-                        child:  new Text("Upcoming", style: new TextStyle(
-                            fontSize: 18.0, color: Colors.white
-                        ))
-                    )
-                  ],
+                new GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, new MaterialPageRoute(
+                        builder: (BuildContext context)=> new MovieListPage(mode: ListMode.Upcoming)));
+                  },
+                  child: new Row(
+                    children: <Widget>[
+                      new Icon(Icons.voicemail, color: Colors.white, size: 28.0,),
+                      new Padding(padding:
+                      const EdgeInsets.only(left: 10.0),
+                          child:  new Text("Upcoming", style: new TextStyle(
+                              fontSize: 18.0, color: Colors.white
+                          ))
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),

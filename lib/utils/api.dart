@@ -54,3 +54,22 @@ Future<List<Movie>> fetchMoviesPopular(int page) async {
 
   return list;
 }
+
+Future<List<Movie>> fetchMoviesList(String type, {int page = 1}) async {
+  var httpClient = createHttpClient();
+  var url = '$TMDB_URL/movie/$type?api_key=$TMDB_API_KEY&page=$page';
+  print(url);
+  var response = await httpClient.get(url);
+
+  final String jsonBody = response.body;
+
+  final container = JSON.decode(jsonBody);
+
+  final List<Map<String,dynamic>> result = container['results'];
+
+  List<Movie> list = new List();
+
+  result.forEach((map) => list.add(new Movie.fromMap(map)));
+
+  return list;
+}

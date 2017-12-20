@@ -12,11 +12,12 @@ enum ListMode {
   Search, TopRated, NowPlaying, Upcoming
 }
 
-class MovieListPage extends StatelessWidget {
+class MovieListPage extends StatelessWidget{
   static const String NAME = "MovieListPage";
 
   static const String LIST_STATE = "ListState";
   static const String LIST_LIST = "ListList";
+  static const String LIST_MODE = "ListMode";
 
   static final Reducer reducer =
     new Reducer(initState: _initState, reduce: _reducer);
@@ -25,6 +26,7 @@ class MovieListPage extends StatelessWidget {
     = new FludexState<Map<String,dynamic>>(<String, dynamic>{
     LIST_STATE : "Begin",
     LIST_LIST: [],
+    LIST_MODE: ""
   });
 
   static FludexState _reducer(FludexState _state, Action action) {
@@ -32,6 +34,7 @@ class MovieListPage extends StatelessWidget {
 
     if (action.type == "SEARCH_BEGIN"){
       state[LIST_STATE] = "Fetching";
+      state[LIST_MODE] = action.payload["mode"];
     }
     else if (action.type is FutureFulfilledAction){
       String purpose = action.payload["purpose"];
@@ -57,6 +60,13 @@ class MovieListPage extends StatelessWidget {
     final Map<String, dynamic> state = new Store(null).state[MovieListPage.NAME];
 
     String listState = state[LIST_STATE];
+    String listMode = state[LIST_MODE];
+
+    print("stateMode: "+listMode);
+    print("widgetMode: "+mode.toString());
+    if (listMode.isNotEmpty && listMode != mode.toString()){
+      listState = "Begin";
+    }
 
     if (listState == "Begin"){
       _dispatchFetchList();
@@ -114,13 +124,31 @@ class MovieListPage extends StatelessWidget {
   }
 
   void _dispatchFetchList() {
-    final Future<List<Movie>> moviesFuture = fetchMoviesPopular(1);
+
+    String type = "";
+
+    switch (mode){
+      case ListMode.NowPlaying:
+        type = "now_playing";
+        break;
+      case ListMode.TopRated:
+        type = "top_rated";
+        break;
+      case ListMode.Upcoming:
+        type = "upcoming";
+        break;
+      case ListMode.Search:
+        break;
+    }
+
+    final Future<List<Movie>> moviesFuture = fetchMoviesList(type);
 
     final Action asyncAction = new Action(
         type: new FutureAction<List<Movie>>(
             moviesFuture,
             initialAction: new Action(
-                type: "SEARCH_BEGIN"
+              type: "SEARCH_BEGIN",
+              payload: {"mode": mode.toString()}
             )
         ),
         payload:{"purpose" : "Search"}
